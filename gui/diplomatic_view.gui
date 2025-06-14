@@ -1035,20 +1035,29 @@ base_window = {
 						using = VerticalScrollBar
 					}
 
+				scrollarea = {
+					size = { 342 298 }
+					position = { 0 88 }
+					scrollbarpolicy_horizontal = always_off
+					using = VerticalScrollAreaCutOff
+					scrollbar_vertical = {
+						using = VerticalScrollBar
+					}
+					
 					scrollwidget = {
-
+							
 						vbox = {
-
+							
 							vbox = {
 								visible = "[DiplomaticView.HasDiplomaticPending]"
 								layoutpolicy_horizontal = expanding
 								layoutpolicy_vertical = fixed
 								using = NoninteractableBG
-								blockoverride "Margins"
+								blockoverride "Margins" 
 								{
 									margin = { 2 8 }
 								}
-
+								
 								textbox = {
 									autoresize = yes
 									multiline = yes
@@ -1074,9 +1083,9 @@ base_window = {
 								layoutpolicy_horizontal = expanding
 								margin_left = 8
 								margin_right = 10
-
+		
 								item = {
-									vbox = {
+									vbox = {	
 										layoutpolicy_horizontal = expanding
 										vbox = {
 											visible = "[Not(IsDataModelEmpty(DiplomaticView.GetActions))]"
@@ -1087,16 +1096,16 @@ base_window = {
 											category_drop = {
 												layoutpolicy_horizontal = expanding
 												size = { 0 32 }
-												blockoverride "Text_alignment"
-												{
-													parentanchor = left|vcenter
+												blockoverride "Text_alignment" 
+												{ 
+													parentanchor = left|vcenter 
 													align = left
 													position = { 16 -2 }
 													max_width = 310
 												}
-												blockoverride "Text"
+												blockoverride "Text" 
 												{
-													text = "[DiplomaticActionCategory.GetName]"
+													text = "[DiplomaticActionCategory.GetName]" 
 												}
 												blockoverride "On_click" { onclick = "[DiplomaticActionCategory.OnClick]" }
 												blockoverride "Down" { visible = yes }
@@ -1109,9 +1118,9 @@ base_window = {
 												name = "close_button_dip"
 												layoutpolicy_horizontal = expanding
 												size = { 0 32 }
-												blockoverride "Text_alignment"
-												{
-													parentanchor = left|vcenter
+												blockoverride "Text_alignment" 
+												{ 
+													parentanchor = left|vcenter 
 													align = left
 													position = { 16 -2 }
 													max_width = 310
@@ -1121,98 +1130,81 @@ base_window = {
 												blockoverride "Down" { visible = no }
 												blockoverride "Right" { visible = yes }
 												blockoverride "RightArrowVisible" { visible = yes }
-
-												visible = "[Not(DiplomaticActionCategory.IsExpanded)]"
+												
+												visible = "[Not(DiplomaticActionCategory.IsExpanded)]" 
 											}
 										}
-
+										
 										vbox = {
 											using = diplomatic_actions_v2
 											layoutpolicy_horizontal = expanding
 										}
 									}
 								}
-							}
+										vbox = {
+											visible = "[Not(IsDataModelEmpty(DiplomaticView.GetActions))]"
+											margin_left = 0
+											margin_right = 4
+											layoutpolicy_horizontal = expanding
+											spacing = -10
 
-							margin_widget = {
+											category_drop = {
+												name = "open_button_dip"
+												layoutpolicy_horizontal = expanding
+												size = { 0 32 }
+												blockoverride "Text_alignment" 
+												{ 
+													parentanchor = left|vcenter 
+													align = left
+													position = { 16 -2 }
+													max_width = 310
+												}
+												blockoverride "Text" 
+												{
+													text = "Economic Actions" 
+												}
+												blockoverride "On_click" { onclick = "[GetVariableSystem.Toggle( 'open_button_dip')]" }
+												blockoverride "Down" { visible = no }
+												blockoverride "Right" { visible = yes }
+												blockoverride "RightArrowVisible" { visible = yes }
+												visible = "[Not(GetVariableSystem.Exists( 'open_button_dip') )]"
+											}
+
+											category_drop = {
+												name = "close_button_dip"
+												layoutpolicy_horizontal = expanding
+												size = { 0 32 }
+												blockoverride "Text_alignment" 
+												{ 
+													parentanchor = left|vcenter 
+													align = left
+													position = { 16 -2 }
+													max_width = 310
+												}
+												blockoverride "Text" { text = "Economic Actions" }
+												blockoverride "On_click" { onclick = "[GetVariableSystem.Toggle( 'open_button_dip')]" }
+												blockoverride "Down" { visible = yes }
+												blockoverride "Right" { visible = no }
+												blockoverride "RightArrowVisible" { visible = no }
+												
+												visible = "[GetVariableSystem.Exists( 'open_button_dip')]" 
+											}
+										}
+
+							vbox = {
 								size = { 0 28 }
 								layoutpolicy_horizontal = expanding
-								margin = { 14 0 }
-								margin_right = 7
-
-
-								text_button_square = {
-									size = { 100% 28 }
-									layoutpolicy_horizontal = expanding
-									datacontext = "[GetScriptedGui('sell_provinces')]"
-									enabled = "[And(ScriptedGui.IsValid(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End), Not(GetVariableSystem.Exists('sell_provinces_open')))]"
-									visible = "[And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
-									blockoverride "On_click" {
-										onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
-										onclick = "[GetVariableSystem.Toggle('sell_provinces_open')]"
-										onclick = "[ExecuteConsoleCommand('gui.createwidget gui/sell_provinces.gui sell_provinces_window')]"
-									}
-									blockoverride "Center_text"
-									{
-										text = "sell_province"
-									}
-								}
-							}
-							margin_widget = {
-							    size = { 0 28 }
-							    layoutpolicy_horizontal = expanding
-							    margin = { 14 0 }
-							    margin_right = 7
-
-							    text_button_square = {
-							        size = { 100% 28 }
-							        layoutpolicy_horizontal = expanding
-							        datacontext = "[GetScriptedGui('dip_demand_conversion')]"
-							        enabled = "[ScriptedGui.IsValid(GuiScope.SetRoot(Player.MakeScope).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope).End)]"
-							        visible = "[Not(EqualTo_int32(DiplomaticView.GetTargetCountry.GetId, Player.GetId ))]"
-							        blockoverride "On_click" {
-							            onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
-							        }
-							        blockoverride "Center_text" {
-							            text = "demand_conversion"
-							        }
-							    }
-							}
-							margin_widget = {
-								size = { 0 28 }
-								layoutpolicy_horizontal = expanding
-								margin = { 14 0 }
-								margin_right = 7
-
-								text_button_square = {
-									size = { 100% 28 }
-									layoutpolicy_horizontal = expanding
-									datacontext = "[GetScriptedGui('dip_send_money')]"
-									enabled = "[And(ScriptedGui.IsValid(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End), Not(GetVariableSystem.Exists('send_money_window')))]"
-									visible = "[And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
-									blockoverride "On_click" {
-										onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
-										#onclick = "[GetVariableSystem.Toggle('sell_provinces_open')]"
-										onclick = "[ExecuteConsoleCommand('gui.createwidget gui/send_money.gui send_money_window')]"
-									}
-									blockoverride "Center_text"
-									{
-										text = "send_money"
-									}
-								}
-							}
-							margin_widget = {
-								size = { 0 28 }
-								layoutpolicy_horizontal = expanding
-								margin = { 14 0 }
-								margin_right = 7
+								margin = { 6 2 }
+								margin_right = 6
+								margin_left = 6
+								margin_top = 4
 
 								text_button_square = {
 									size = { 100% 28 }
 									layoutpolicy_horizontal = expanding
 									datacontext = "[GetScriptedGui('dip_send_manpower')]"
 									enabled = "[And(ScriptedGui.IsValid(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End), Not(GetVariableSystem.Exists('sell_provinces_open')))]"
-									visible = "[And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
+									visible = "[GetVariableSystem.Exists( 'open_button_dip' ),And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
 									blockoverride "On_click" {
 										onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
 										#onclick = "[GetVariableSystem.Toggle('sell_provinces_open')]"
@@ -1224,34 +1216,157 @@ base_window = {
 									}
 								}
 							}
-							margin_widget = {
+							vbox = {
 								size = { 0 28 }
 								layoutpolicy_horizontal = expanding
-								margin = { 14 0 }
-								margin_right = 7
+								margin = { 6 2 }
+								margin_right = 6
+								margin_left = 6
 
 								text_button_square = {
 									size = { 100% 28 }
 									layoutpolicy_horizontal = expanding
-									datacontext = "[GetScriptedGui('dip_subsidies')]"
-									enabled = "[And(ScriptedGui.IsValid(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End), Not(GetVariableSystem.Exists('sell_provinces_open')))]"
-									visible = "[And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
+									datacontext = "[GetScriptedGui('dip_send_money')]"
+									enabled = "[And(ScriptedGui.IsValid(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End), Not(GetVariableSystem.Exists('send_money_window')))]"
+									visible = "[GetVariableSystem.Exists( 'open_button_dip' ),And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
 									blockoverride "On_click" {
 										onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
 										#onclick = "[GetVariableSystem.Toggle('sell_provinces_open')]"
-										onclick = "[ExecuteConsoleCommand('gui.createwidget gui/subsidies.gui send_money_window')]"
+										onclick = "[ExecuteConsoleCommand('gui.createwidget gui/send_money.gui send_money_window')]"
 									}
 									blockoverride "Center_text"
 									{
-										text = "Subsidies"
+										text = "send_money"
 									}
 								}
 							}
-							margin_widget = {
+#							vbox = {
+#								size = { 0 28 }
+#								layoutpolicy_horizontal = expanding
+#								margin = { 6 2 }
+#								margin_right = 6
+#								margin_left = 6
+#
+#								text_button_square = {
+#									size = { 100% 28 }
+#									layoutpolicy_horizontal = expanding
+#									datacontext = "[GetScriptedGui('dip_subsidies')]"
+#									enabled = "[And(ScriptedGui.IsValid(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End), Not(GetVariableSystem.Exists('sell_provinces_open')))]"
+#									visible = "[GetVariableSystem.Exists( 'open_button_dip' ),And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
+#									blockoverride "On_click" {
+#										onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
+#										#onclick = "[GetVariableSystem.Toggle('sell_provinces_open')]"
+#										onclick = "[ExecuteConsoleCommand('gui.createwidget gui/subsidies.gui send_money_window')]"
+#									}
+#									blockoverride "Center_text"
+#									{
+#										text = "Subsidies"
+#									}
+#								}
+#							}
+							vbox = {
 								size = { 0 28 }
 								layoutpolicy_horizontal = expanding
-								margin = { 14 0 }
-								margin_right = 7
+								margin = { 6 2 }
+								margin_right = 6
+								margin_left = 6
+								margin_bottom = 4
+
+
+								text_button_square = {
+									size = { 100% 28 }
+									layoutpolicy_horizontal = expanding
+									datacontext = "[GetScriptedGui('sell_provinces')]"
+									enabled = "[And(ScriptedGui.IsValid(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End), Not(GetVariableSystem.Exists('sell_provinces_open')))]"
+									visible = "[GetVariableSystem.Exists( 'open_button_dip' ),And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
+									blockoverride "On_click" {
+										onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
+										onclick = "[GetVariableSystem.Toggle('sell_provinces_open')]"
+										onclick = "[ExecuteConsoleCommand('gui.createwidget gui/sell_provinces.gui sell_provinces_window')]"
+									}
+									blockoverride "Center_text"
+									{
+										text = "sell_province"
+									}
+								}
+							}
+										vbox = {
+											visible = "[Not(IsDataModelEmpty(DiplomaticView.GetActions))]"
+											margin_left = 0
+											margin_right = 4
+											layoutpolicy_horizontal = expanding
+											spacing = -10
+
+											category_drop = {
+												name = "open_button_dip2"
+												layoutpolicy_horizontal = expanding
+												size = { 0 32 }
+												blockoverride "Text_alignment" 
+												{ 
+													parentanchor = left|vcenter 
+													align = left
+													position = { 16 -2 }
+													max_width = 310
+												}
+												blockoverride "Text" 
+												{
+													text = "Political Actions" 
+												}
+												blockoverride "On_click" { onclick = "[GetVariableSystem.Toggle( 'open_button_dip2')]" }
+												blockoverride "Down" { visible = no }
+												blockoverride "Right" { visible = yes }
+												blockoverride "RightArrowVisible" { visible = yes }
+												visible = "[Not(GetVariableSystem.Exists( 'open_button_dip2') )]"
+											}
+
+											category_drop = {
+												name = "close_button_dip2"
+												layoutpolicy_horizontal = expanding
+												size = { 0 32 }
+												blockoverride "Text_alignment" 
+												{ 
+													parentanchor = left|vcenter 
+													align = left
+													position = { 16 -2 }
+													max_width = 310
+												}
+												blockoverride "Text" { text = "Political Actions" }
+												blockoverride "On_click" { onclick = "[GetVariableSystem.Toggle( 'open_button_dip2')]" }
+												blockoverride "Down" { visible = yes }
+												blockoverride "Right" { visible = no }
+												blockoverride "RightArrowVisible" { visible = no }
+												
+												visible = "[GetVariableSystem.Exists( 'open_button_dip2')]" 
+											}
+										}
+							vbox = {
+							    size = { 0 28 }
+							    layoutpolicy_horizontal = expanding
+							    margin = { 6 2 }
+							    margin_right = 6
+							    margin_left = 6
+							    margin_top = 4
+
+							    text_button_square = {
+							        size = { 100% 28 }
+							        layoutpolicy_horizontal = expanding
+							        datacontext = "[GetScriptedGui('dip_demand_conversion')]"
+							        enabled = "[ScriptedGui.IsValid(GuiScope.SetRoot(Player.MakeScope).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope).End)]"
+							        visible = "[GetVariableSystem.Exists( 'open_button_dip2' ),And(Not(EqualTo_int32(DiplomaticView.GetTargetCountry.GetId, Player.GetId ))]"
+							        blockoverride "On_click" {
+							            onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
+							        }
+							        blockoverride "Center_text" {
+							            text = "demand_conversion"
+							        }
+							    }
+							}
+							vbox = {
+								size = { 0 28 }
+								layoutpolicy_horizontal = expanding
+								margin = { 6 2 }
+								margin_right = 6
+								margin_left = 6
 
 
 								text_button_square = {
@@ -1259,7 +1374,7 @@ base_window = {
 									layoutpolicy_horizontal = expanding
 									datacontext = "[GetScriptedGui('make_player_subject')]"
 									enabled = "[ScriptedGui.IsValid(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
-									visible = "[And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
+									visible = "[GetVariableSystem.Exists( 'open_button_dip2' ),And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
 									blockoverride "On_click" {
 										onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
 									}
@@ -1269,14 +1384,13 @@ base_window = {
 									}
 								}
 							}
-
-
-
-							margin_widget = {
+							vbox = {
 								size = { 0 28 }
 								layoutpolicy_horizontal = expanding
-								margin = { 14 0 }
-								margin_right = 7
+								margin = { 6 2 }
+								margin_right = 6
+								margin_left = 6
+								margin_bottom = 4
 
 
 								text_button_square = {
@@ -1284,7 +1398,7 @@ base_window = {
 									layoutpolicy_horizontal = expanding
 									datacontext = "[GetScriptedGui('give_up_claims')]"
 									enabled = "[ScriptedGui.IsValid(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
-									visible = "[And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
+									visible = "[GetVariableSystem.Exists( 'open_button_dip2' ),And(Not(DiplomaticView.GetTargetCountry.IsBarbarian), Not(EqualTo_int32( DiplomaticView.GetTargetCountry.GetId, Player.GetId )))]"
 									blockoverride "On_click" {
 										onclick = "[ScriptedGui.Execute(GuiScope.SetRoot( Player.MakeScope ).AddScope('target', DiplomaticView.GetTargetCountry.MakeScope ).End)]"
 									}
@@ -1293,16 +1407,15 @@ base_window = {
 										text = "give_up_claims"
 									}
 								}
-							}
-
-
+							}			
+			           	}
 							vbox = {
 								layoutpolicy_vertical = expanding
 							}
 						}
 					}
 				}
-			}
+			}		
 		}
 
 		margin_widget = {
